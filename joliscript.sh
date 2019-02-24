@@ -1,14 +1,16 @@
-#SEARCH_FOLDER=./tm/maven-repository-5.7.7
-SEARCH_FOLDER=$1
-baseStringLength=`expr length $SEARCH_FOLDER + 1` 
+#SEARCH_FOLDER=./tmp/maven-repository-5.7.7
+FOLDER_TO_UPLOAD=$1
+NEXUS_URL=http://localhost:8081/repository/maven-releases/
+NEXUS_SERVER_ID=nexus-local
+rootStrLength=`expr length $FOLDER_TO_UPLOAD + 1` 
  
 
-for f in $(find $SEARCH_FOLDER -type f); 
+for f in $(find $FOLDER_TO_UPLOAD -type f); 
 do 
 
-	toFile=${f:$baseStringLength};
+	toFile=${f:$rootStrLength};
 	echo $toFile
-	mvn wagon:upload-single -Dwagon.fromFile=$f -Dwagon.url="http://localhost:8081/repository/maven-releases/" -Dwagon.serverId="nexus-local" -Dwagon.toFile="$toFile";
+	mvn wagon:upload-single -Dwagon.fromFile=$f -Dwagon.url=$NEXUS_URL -Dwagon.serverId=$NEXUS_SERVER_ID -Dwagon.toFile="$toFile";
 done
 
 
